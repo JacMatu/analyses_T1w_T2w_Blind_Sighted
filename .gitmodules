@@ -1,3 +1,8 @@
 [submodule "code/lib/bidspm"]
 	path = code/lib/bidspm
 	url = https://github.com/cpp-lln-lab/bidspm.git
+[submodule "inputs/raw"]
+	path = inputs/raw
+	url = git@gin.g-node.org:/JacMatu/2021_Nencki_MyelinMapping_JM_raw.git
+	datalad-id = 2db71804-44cb-4710-bce9-c5fd28f98b38
+	datalad-url = git@gin.g-node.org:/JacMatu/2021_Nencki_MyelinMapping_JM_raw.git
