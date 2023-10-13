@@ -3,8 +3,9 @@
 root_dir=${PWD}
 raw_dir=${root_dir}/inputs/raw
 derivatives_dir=${root_dir}/outputs/derivatives
-preproc_dir=${derivatives_dir}/bidspm-preproc
-stats_dir=${derivatives_dir}/bidspm-stats
+hcp_dir=${derivatives_dir}/hcppipelines
+#preproc_dir=${derivatives_dir}/bidspm-preproc
+#stats_dir=${derivatives_dir}/bidspm-stats
 
 # get url of the gin repos from config
 source dataladConfig.sh
@@ -22,32 +23,48 @@ datalad create -d . "${derivatives_dir}"
 
 if [ ! -z "${GIN_BASENAME}" ]; then
     cd "${derivatives_dir}"
-    datalad create-sibling-gin -d . -s origin --access-protocol ssh --private  cpp_brewery/"${GIN_BASENAME}"-derivatives
+    datalad create-sibling-gin -d . -s origin --access-protocol ssh --private --credential JacMat_gin_token cpp_brewery/"${GIN_BASENAME}"-derivatives 
+    #datalad sibling add --name origin --url "${URL_DER} 
     cd "${root_dir}"
     datalad subdatasets --set-property url git@gin.g-node.org:/cpp_brewery/"${GIN_BASENAME}"-derivatives.git "${derivatives_dir}"
 fi
 
 cd "${derivatives_dir}"
 
-datalad create -d . "${preproc_dir}"
+# HCPPIPELINES IN DERIVATIVES
+datalad create -d . "${hcp_dir}"
 
 if [ ! -z "${GIN_BASENAME}" ]; then
-    cd "${preproc_dir}"
-    datalad create-sibling-gin -d . -s origin --access-protocol ssh --private  cpp_brewery/"${GIN_BASENAME}"-derivatives-bidspm-preproc
+    cd "${hcp_dir}"
+    datalad create-sibling-gin -d . -s origin --access-protocol ssh --private --credential JacMat_gin_token cpp_brewery/"${GIN_BASENAME}"-derivatives-hcppipelines
     cd "${derivatives_dir}"
-    datalad subdatasets --set-property url git@gin.g-node.org:/cpp_brewery/"${GIN_BASENAME}"-derivatives-bidspm-preproc.git bidspm-preproc
+    datalad subdatasets --set-property url git@gin.g-node.org:/cpp_brewery"${GIN_BASENAME}"-derivatives-hcppipelines.git hcppipelines
 fi
+
+#datalad create -d . "${preproc_dir}"
+
+#if [ ! -z "${GIN_BASENAME}" ]; then
+#    cd "${preproc_dir}"
+#    datalad create-sibling-gin -d . -s origin --access-protocol ssh --private  cpp_brewery/"${GIN_BASENAME}"-derivatives-bidspm-preproc
+#    cd "${derivatives_dir}"
+#    datalad subdatasets --set-property url git@gin.g-node.org:/cpp_brewery/"${GIN_BASENAME}"-derivatives-bidspm-preproc.git bidspm-preproc
+#fi
+
+#cd "${derivatives_dir}"
+
+#datalad create -d . "${stats_dir}"
+
+#if [ ! -z "${GIN_BASENAME}" ]; then
+#    cd "${stats_dir}"
+#    datalad create-sibling-gin -d . -s origin --access-protocol ssh --private  cpp_brewery/"${GIN_BASENAME}"-derivatives-bidspm-stats
+#    cd "${derivatives_dir}"
+#    datalad subdatasets --set-property url git@gin.g-node.org:/cpp_brewery/"${GIN_BASENAME}"-derivatives-bidspm-stats.git bidspm-stats
+#fi
 
 cd "${derivatives_dir}"
 
-datalad create -d . "${stats_dir}"
 
-if [ ! -z "${GIN_BASENAME}" ]; then
-    cd "${stats_dir}"
-    datalad create-sibling-gin -d . -s origin --access-protocol ssh --private  cpp_brewery/"${GIN_BASENAME}"-derivatives-bidspm-stats
-    cd "${derivatives_dir}"
-    datalad subdatasets --set-property url git@gin.g-node.org:/cpp_brewery/"${GIN_BASENAME}"-derivatives-bidspm-stats.git bidspm-stats
-fi
+
 
 cd "${derivatives_dir}"
 
