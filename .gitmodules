@@ -5,7 +5,6 @@
 	path = inputs/raw
 	url = git@gin.g-node.org:/JacMatu/2021_Nencki_MyelinMapping_JM_raw.git
 	datalad-id = 2db71804-44cb-4710-bce9-c5fd28f98b38
-	datalad-url = git@gin.g-node.org:/JacMatu/2021_Nencki_MyelinMapping_JM_raw.git
 [submodule "outputs/derivatives"]
 	path = outputs/derivatives
 	url = git@gin.g-node.org:/cpp_brewery/analyses_T1w_T2w_Blind_Sighted-derivatives.git
