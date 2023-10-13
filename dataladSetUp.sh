@@ -38,7 +38,7 @@ if [ ! -z "${GIN_BASENAME}" ]; then
     cd "${hcp_dir}"
     datalad create-sibling-gin -d . -s origin --access-protocol ssh --private --credential JacMat_gin_token cpp_brewery/"${GIN_BASENAME}"-derivatives-hcppipelines
     cd "${derivatives_dir}"
-    datalad subdatasets --set-property url git@gin.g-node.org:/cpp_brewery"${GIN_BASENAME}"-derivatives-hcppipelines.git hcppipelines
+    datalad subdatasets --set-property url git@gin.g-node.org:/cpp_brewery/"${GIN_BASENAME}"-derivatives-hcppipelines.git hcppipelines
 fi
 
 #datalad create -d . "${preproc_dir}"
@@ -60,8 +60,6 @@ fi
 #    cd "${derivatives_dir}"
 #    datalad subdatasets --set-property url git@gin.g-node.org:/cpp_brewery/"${GIN_BASENAME}"-derivatives-bidspm-stats.git bidspm-stats
 #fi
-
-cd "${derivatives_dir}"
 
 
 
