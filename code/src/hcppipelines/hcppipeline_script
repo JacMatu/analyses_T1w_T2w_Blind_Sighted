@@ -1,0 +1,12 @@
+docker run -i --rm \
+    -v /mnt/DATA/jacmatu/Projects/Myelin_Blind_Sighted/T1w_T2w_HCPPipelines/inputs/2021_Nencki_MyelinMapping_JM_raw/:/bids_dataset \
+    -v /mnt/DATA/jacmatu/Projects/Myelin_Blind_Sighted/T1w_T2w_HCPPipelines/outputs/derivatives/hcppipelines:/outputs \
+    bids/hcppipelines:v4.3.0-3 \
+        /bids_dataset \
+        /outputs \
+        participant \
+        --participant_label blind07 \
+	--n_cpu 6 \
+        --license_key 69768
+
+echo "HCPPipelines done!"

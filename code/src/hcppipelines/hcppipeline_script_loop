@@ -1,0 +1,33 @@
+#!/bin/bash
+
+#Specify some variables about subjects 
+code=('01' '02' '03' '04' '05' '06' '07' '08' '09' '10' '11' '12' '13' '14' '15' '16' '17' '18' '19' '20')
+group=('blind' 'sighted')
+
+#Loop across both groups and all subjects
+
+for gr in "${!group[@]}"; do
+
+        echo processing group: "${group[$gr]}"
+
+        for sub in "${!code[@]}"; do
+                
+                echo processing sub "${code[$sub]}"
+
+                docker run -i --rm \
+                        -v /mnt/DATA/jacmatu/Projects/Myelin_Blind_Sighted/T1w_T2w_HCPPipelines/inputs/2021_Nencki_MyelinMapping_JM_raw/:/bids_dataset \
+                        -v /mnt/DATA/jacmatu/Projects/Myelin_Blind_Sighted/T1w_T2w_HCPPipelines/outputs/derivatives/hcppipelines:/outputs \
+                        bids/hcppipelines:v4.3.0-3 \
+                                /bids_dataset \
+                                /outputs \
+                                participant --participant_label "${group[$gr]}${code[$sub]}" \
+	                --n_cpu 6 \
+                        --license_key 69768
+
+                echo done with sub-"${code[$sub]}"
+        done
+
+        echo done with group: "${group[$gr]}"
+done
+
+echo "HCPPipelines done!"
