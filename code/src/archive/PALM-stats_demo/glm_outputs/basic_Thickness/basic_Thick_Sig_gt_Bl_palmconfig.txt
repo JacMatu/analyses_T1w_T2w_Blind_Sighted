@@ -1,0 +1,9 @@
+# Configuration file for PALM.
+# Version (github, running in MATLAB 9.7.0.1190202 (R2019b).
+# 31-May-2024 15:34:11
+
+-i Thickness_164k.dscalar.nii
+-d design_basic.mat
+-t conSig_basic.con
+-n 5000
+-o basic_Thick_Sig_gt_Bl

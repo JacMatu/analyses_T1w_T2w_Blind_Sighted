@@ -1,0 +1,9 @@
+# Configuration file for PALM.
+# Version (github, running in MATLAB 9.7.0.1190202 (R2019b).
+# 13-Mar-2024 12:27:53
+
+-i Thickness_164k.dscalar.nii
+-d design.mat
+-t conBlind.con
+-n 5000
+-o Thick_blind_gt_sig_test

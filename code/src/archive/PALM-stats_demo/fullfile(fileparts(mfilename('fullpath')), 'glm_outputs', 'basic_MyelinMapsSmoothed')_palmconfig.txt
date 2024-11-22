@@ -1,0 +1,10 @@
+# Configuration file for PALM.
+# Version (github, running in MATLAB 9.7.0.1190202 (R2019b).
+# 22-May-2024 16:06:09
+
+-i fullfile(fileparts(mfilename('fullpath')),'glm_inputs', 'SmoothedMyelinMaps_BC164k.dscalar.nii')
+-d design_basic
+-t con_basic_bl
+-n 5000
+-corrcon
+-o fullfile(fileparts(mfilename('fullpath')), 'glm_outputs', 'basic_MyelinMapsSmoothed')

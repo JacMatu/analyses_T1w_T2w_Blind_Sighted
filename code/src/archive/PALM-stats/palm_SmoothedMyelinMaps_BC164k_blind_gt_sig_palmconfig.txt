@@ -1,0 +1,10 @@
+# Configuration file for PALM.
+# Version (github, running in MATLAB 9.7.0.1190202 (R2019b).
+# 12-Mar-2024 16:37:20
+
+-i SmoothedMyelinMaps_BC164k.dscalar.nii
+-d design.mat
+-t conBlind.con
+-n 5000
+-corrcon
+-o palm_SmoothedMyelinMaps_BC164k_blind_gt_sig

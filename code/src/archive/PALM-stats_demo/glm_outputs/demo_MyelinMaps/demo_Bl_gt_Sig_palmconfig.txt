@@ -1,0 +1,9 @@
+# Configuration file for PALM.
+# Version (github, running in MATLAB 9.7.0.1190202 (R2019b).
+# 04-Jun-2024 09:05:59
+
+-i MyelinMaps_BC164k.dscalar.nii
+-d design_demo.mat
+-t conBlind_demo.con
+-n 5000
+-o demo_Bl_gt_Sig
