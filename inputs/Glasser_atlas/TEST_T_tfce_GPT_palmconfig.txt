@@ -1,0 +1,12 @@
+# Configuration file for PALM.
+# Version (github, running in MATLAB 9.7.0.1190202 (R2019b).
+# 13-Mar-2025 16:09:58
+
+-i SmoothedMyelinMaps_BC32k.dscalar.nii
+-d design_demo.mat
+-t conSig_demo.con
+-T
+-n 5000
+-cifti
+-cifti-out
+-o TEST_T_tfce_GPT
