@@ -4,8 +4,8 @@ root_dir=${PWD}
 raw_dir=${root_dir}/inputs/raw
 derivatives_dir=${root_dir}/outputs/derivatives
 hcp_dir=${derivatives_dir}/hcppipelines
-#preproc_dir=${derivatives_dir}/bidspm-preproc
-#stats_dir=${derivatives_dir}/bidspm-stats
+roi_dir=${derivatives_dir}/wb_command-ROIs
+stats_dir=${derivatives_dir}/PALM-stats
 
 # get url of the gin repos from config
 source dataladConfig.sh
@@ -41,27 +41,26 @@ if [ ! -z "${GIN_BASENAME}" ]; then
     datalad subdatasets --set-property url git@gin.g-node.org:/cpp_brewery/"${GIN_BASENAME}"-derivatives-hcppipelines.git hcppipelines
 fi
 
-#datalad create -d . "${preproc_dir}"
+datalad create -d . "${roi_dir}"
 
-#if [ ! -z "${GIN_BASENAME}" ]; then
-#    cd "${preproc_dir}"
-#    datalad create-sibling-gin -d . -s origin --access-protocol ssh --private  cpp_brewery/"${GIN_BASENAME}"-derivatives-bidspm-preproc
-#    cd "${derivatives_dir}"
-#    datalad subdatasets --set-property url git@gin.g-node.org:/cpp_brewery/"${GIN_BASENAME}"-derivatives-bidspm-preproc.git bidspm-preproc
-#fi
+if [ ! -z "${GIN_BASENAME}" ]; then
+    cd "${roi_dir}"
+    datalad create-sibling-gin -d . -s origin --access-protocol ssh --private  cpp_brewery/"${GIN_BASENAME}"-derivatives-wb_command-ROIs
+    cd "${derivatives_dir}"
+    datalad subdatasets --set-property url git@gin.g-node.org:/cpp_brewery/"${GIN_BASENAME}"-derivatives-wb_command-ROIs wb_command-ROIs
+fi
 
-#cd "${derivatives_dir}"
+cd "${derivatives_dir}"
 
-#datalad create -d . "${stats_dir}"
+datalad create -d . "${stats_dir}"
 
-#if [ ! -z "${GIN_BASENAME}" ]; then
-#    cd "${stats_dir}"
-#    datalad create-sibling-gin -d . -s origin --access-protocol ssh --private  cpp_brewery/"${GIN_BASENAME}"-derivatives-bidspm-stats
-#    cd "${derivatives_dir}"
-#    datalad subdatasets --set-property url git@gin.g-node.org:/cpp_brewery/"${GIN_BASENAME}"-derivatives-bidspm-stats.git bidspm-stats
-#fi
+if [ ! -z "${GIN_BASENAME}" ]; then
+    cd "${stats_dir}"
+    datalad create-sibling-gin -d . -s origin --access-protocol ssh --private  cpp_brewery/"${GIN_BASENAME}"-derivatives-PALM-stats
+    cd "${derivatives_dir}"
+    datalad subdatasets --set-property url git@gin.g-node.org:/cpp_brewery/"${GIN_BASENAME}"-derivatives-PALM-stats.git PALM-stats
 
-
+fi
 
 
 cd "${derivatives_dir}"
