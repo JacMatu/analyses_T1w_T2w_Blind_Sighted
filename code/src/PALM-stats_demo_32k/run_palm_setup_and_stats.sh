@@ -31,11 +31,11 @@ ReverseMask=1 #do you want to run a model in the rest of the brain apart from yo
 
 ## WHICH PARTS OF THE SCRIPT YOU WANT TO RUN?
 #Do you want your derivatives and glm giles set up
-glm_setup=1
+glm_setup=0
 #Do you want to prepare your CIFTI files for TFCE?
-palm_tfce_setup=1
+palm_tfce_setup=0
 #Do you want to run your PALM stats?
-palm_tfce_stats=1
+palm_tfce_stats=0
 #Do you want to build CIFTI files from your results?
 palm_build_cifti=1
 
@@ -238,15 +238,15 @@ if [ $palm_build_cifti -eq 1 ]; then
             -cifti-create-dense-from-template \
             $dir_output_model/${Smoothed}MyelinMaps_BC${Res}.dscalar.nii \
             $dir_output_model/cifti_results/${output_cifti}_SightedGtBlind_${LIST_STATS[$stat]}_tstat_${LIST_PVAL[$pval]}.dscalar.nii \
-            -metric CORTEX_LEFT $dir_output_model/${output}_L_dpv_tstat_${LIST_PVAL[$pval]}_d1.gii \
-            -metric CORTEX_RIGHT $dir_output_model/${output}_R_dpv_tstat_${LIST_PVAL[$pval]}_d1.gii
+            -metric CORTEX_LEFT $dir_output_model/${output}_L_${LIST_STATS[$stat]}_tstat_${LIST_PVAL[$pval]}_d1.gii \
+            -metric CORTEX_RIGHT $dir_output_model/${output}_R_${LIST_STATS[$stat]}_tstat_${LIST_PVAL[$pval]}_d1.gii
 
         wb_command \
             -cifti-create-dense-from-template \
             $dir_output_model/${Smoothed}MyelinMaps_BC${Res}.dscalar.nii \
             $dir_output_model/cifti_results/${output_cifti}_BlindGtSighted_${LIST_STATS[$stat]}_tstat_${LIST_PVAL[$pval]}.dscalar.nii \
-            -metric CORTEX_LEFT $dir_output_model/${output}_L_dpv_tstat_${LIST_PVAL[$pval]}_d2.gii \
-            -metric CORTEX_RIGHT $dir_output_model/${output}_R_dpv_tstat_${LIST_PVAL[$pval]}_d2.gii
+            -metric CORTEX_LEFT $dir_output_model/${output}_L_${LIST_STATS[$stat]}_tstat_${LIST_PVAL[$pval]}_d2.gii \
+            -metric CORTEX_RIGHT $dir_output_model/${output}_R_${LIST_STATS[$stat]}_tstat_${LIST_PVAL[$pval]}_d2.gii
         
             done
         done
