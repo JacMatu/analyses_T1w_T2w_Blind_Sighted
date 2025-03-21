@@ -13,15 +13,6 @@
 #   1. grab atlas and use a series of hand-piced ROI labels to create a dlabel.nii image for both hemispheres
 #   2. change cifti mapping from dlabel.nii to dscalar.nii 
 
-
-#Get this script's DIR as a starting point for other folders
-#SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
-
-
-#code_dir='/Volumes/Slim_Reaper/Projects/analyses_T1w_T2w_Blind_Sighted/code/src'
-
-#atlas=$code_dir/PALM-stats_demo_32k/MMP_Glasser_Atlas/Q1-Q6_RelatedValidation210.CorticalAreas_dil_Final_Final_Areas_Group_Colors.32k_fs_LR.dlabel.nii
-
 # SPECIFY YOUR MAIN YODA DIR AND SET UP ALL OTHER DIRS 
 main_dir=/Volumes/Slim_Reaper/Projects/analyses_T1w_T2w_Blind_Sighted
 
@@ -37,7 +28,8 @@ mkdir -p $derivatives_output
 echo 'Extracting ROIs from atlas...'
 
 #ROI output
-ROI_label=$derivatives_output/Glasser_VisualCortex_LR.32k_fs_LR.dlabel.nii
+#ROI_label=$derivatives_output/Glasser_VisualCortex_LR.32k_fs_LR.dlabel.nii
+ROI_label=$derivatives_output/BinaryTest_Glasser_VisualCortex_LR.32k_fs_LR.dlabel.nii
 
 #Define expression, break across lines for elegance (ROI numbers explained at the bottom of the script)
 
@@ -63,7 +55,8 @@ wb_command -cifti-math  \
 #### CHANGE MAPPING TO SCALAR 
 echo 'Changing cifti mapping to dense scalar...'
 
-ROI_scalar=$derivatives_output/Glasser_VisualCortex_LR.32k_fs_LR.dscalar.nii
+#ROI_scalar=$derivatives_output/Glasser_VisualCortex_LR.32k_fs_LR.dscalar.nii
+ROI_scalar=$derivatives_output/BinaryTest_Glasser_VisualCortex_LR.32k_fs_LR.dscalar.nii
 
 wb_command -cifti-change-mapping    \
     $ROI_label  \
@@ -74,9 +67,37 @@ wb_command -cifti-change-mapping    \
 
 echo 'Script done, check your new ROI in wb_view!'
 
+#### TRY ONLY V1
+
+ROI_label=$derivatives_output/V1_Glasser_VisualCortex_LR.32k_fs_LR.dlabel.nii
+
+#Define expression, break across lines for elegance (ROI numbers explained at the bottom of the script)
+
+#Right hemi
+#exp='x1==1 
+#Left hemi
+#x1==181 |
+
+#Execute the extraction from atlas
+wb_command -cifti-math  \
+   'x1==1 || x1==181'   \
+    $ROI_label \
+    -var x1 $atlas_input
+
+#### CHANGE MAPPING TO SCALAR 
+echo 'Changing cifti mapping to dense scalar...'
+
+#ROI_scalar=$derivatives_output/Glasser_VisualCortex_LR.32k_fs_LR.dscalar.nii
+ROI_scalar=$derivatives_output/V1_Glasser_VisualCortex_LR.32k_fs_LR.dscalar.nii
+
+wb_command -cifti-change-mapping    \
+    $ROI_label  \
+    'ROW'   \
+    $ROI_scalar \
+    -scalar
 
 
-
+echo 'Script done, check your new ROI in wb_view!'
 
 
 
