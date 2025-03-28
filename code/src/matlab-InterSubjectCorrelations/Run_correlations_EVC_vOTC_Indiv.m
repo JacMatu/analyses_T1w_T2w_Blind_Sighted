@@ -7,7 +7,7 @@ addpath('/Users/jacekmatuszewski/Documents/GitHub/cifti-matlab');
 wb = '/Users/jacekmatuszewski/Documents/GitHub/workbench_2/bin_macosx64/wb_command';
 
 %4D file, 1:20 = BLIND, then 21:40 = SIGHTED
-cifti_4D='/Volumes/Slim_Reaper/Projects/analyses_T1w_T2w_Blind_Sighted/outputs/derivatives/PALM-stats/glm_inputs/MyelinMaps_BC32k.dscalar.nii';
+cifti_4D='/Volumes/Slim_Reaper/Projects/analyses_T1w_T2w_Blind_Sighted/outputs/derivatives/PALM-stats/archive/glm_inputs/SmoothedMyelinMaps_BC32k.dscalar.nii';
 
 data_blind = ciftiopen(cifti_4D, wb).cdata(:, 1:20);
 data_sighted = ciftiopen(cifti_4D, wb).cdata(:, 21:40);
@@ -79,9 +79,9 @@ disp('Whole Brain Sighted between-group correlations:');
 disp(mean(sighted_BG_WholeBrain, 1));
 
 
-%% CORRELATIONS IN OCCIPITAL CORTEX ONLY! 
+%% CORRELATIONS IN vOTC ONLY! 
 %roi_vis_cort = '/Volumes/Slim_Reaper/Projects/analyses_T1w_T2w_Blind_Sighted/outputs/derivatives/wb_command-ROIs/Glasser_VisualCortex_LR.32k_fs_LR.dscalar.nii';
-roi_vis_cort = '/Volumes/Slim_Reaper/Projects/analyses_T1w_T2w_Blind_Sighted/outputs/derivatives/wb_command-ROIs/BinaryTest_Glasser_VisualCortex_LR.32k_fs_LR.dscalar.nii';
+roi_vis_cort = '/Volumes/Slim_Reaper/Projects/analyses_T1w_T2w_Blind_Sighted/outputs/derivatives/wb_command-ROIs/vOTC_Glasser_VisualCortex_LR.32k_fs_LR.dscalar.nii';
 
 %Load mask and multiply columns
 vis_cort_mask = ciftiopen(roi_vis_cort, wb).cdata;
@@ -119,10 +119,10 @@ for i = 1:20
 end
 
 % Display the correlation results
-disp('Occipital Cortex Blind within-group correlations:');
+disp('vOTC Blind within-group correlations:');
 disp(mean(blind_WG_OccipitalCortex, 1));
 
-disp('Occipital Cortex Sighted within-group correlations:');
+disp('vOTCSighted within-group correlations:');
 disp(mean(sighted_WG_OccipitalCortex, 1));
 
 % Between Group Correlations
@@ -147,14 +147,14 @@ for i = 1:20
 end
 
 
-disp('Occipital Cortex Blind between-group correlations:');
+disp('vOTC Blind between-group correlations:');
 disp(mean(blind_BG_OccipitalCortex, 1));
 
-disp('Occipital Cortex Sighted between-group correlations:');
+disp('vOTC Sighted between-group correlations:');
 disp(mean(sighted_BG_OccipitalCortex, 1));
 
-%% CORRELATIONS IN V1 ONLY
-roi_V1 = '/Volumes/Slim_Reaper/Projects/analyses_T1w_T2w_Blind_Sighted/outputs/derivatives/wb_command-ROIs/V1_Glasser_VisualCortex_LR.32k_fs_LR.dscalar.nii';
+%% CORRELATIONS IN EVC ONLY
+roi_V1 = '/Volumes/Slim_Reaper/Projects/analyses_T1w_T2w_Blind_Sighted/outputs/derivatives/wb_command-ROIs/EVC_Glasser_VisualCortex_LR.32k_fs_LR.dscalar.nii';
 
 %Load mask and multiply columns
 v1_mask = ciftiopen(roi_V1, wb).cdata;
@@ -190,10 +190,10 @@ for i = 1:20
 end
 
 % Display the correlation results
-disp('V1 Blind within-group correlations:');
+disp('EVC Blind within-group correlations:');
 disp(mean(blind_WG_V1, 1));
 
-disp('V1 Sighted within-group correlations:');
+disp('EVC Sighted within-group correlations:');
 disp(mean(sighted_WG_V1, 1));
 
 % Between Group Correlations
@@ -216,10 +216,10 @@ for i = 1:20
     sighted_BG_V1(i) = mean(corr(v1_sighted(:, i),v1_blind));
 end
 
-disp('V1 Blind between-group correlations:');
+disp('EVC Blind between-group correlations:');
 disp(mean(blind_BG_V1, 1));
 
-disp('V1 Sighted between-group correlations:');
+disp('EVC Sighted between-group correlations:');
 disp(mean(sighted_BG_V1, 1));
 
 
@@ -232,7 +232,7 @@ corr_table = table(blind_WG_WholeBrain, blind_BG_WholeBrain, ...
     sighted_WG_V1, sighted_BG_V1);
 
 
-writetable(corr_table, [corrtype, '_Correlation_Coefficients_Ind.tsv'], 'Delimiter', 'tab','FileType', 'text');
+writetable(corr_table, [corrtype, '_Correlation_EVC_vOTC_Coefficients_Smoothed_Ind.tsv'], 'Delimiter', 'tab','FileType', 'text');
 %% TO BE DONE: STATS! 
 
 

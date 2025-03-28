@@ -35,12 +35,12 @@ glm_setup=0
 #Do you want to prepare your CIFTI files for TFCE?
 palm_tfce_setup=0
 #Do you want to run your PALM stats?
-palm_tfce_stats=1
+palm_tfce_stats=0
 #Do you want to build CIFTI files from your results?
 palm_build_cifti=1
 
 #Your GLM output
-dir_output_model=$dir_deriv_stats/final_cluster_TFCE_${Smoothed}_Demo_${Res}
+dir_output_model=$dir_deriv_stats/test_TFCE_H-1_E-0p5_C-1_${Smoothed}_Demo_${Res}
 
 
 ########## GLM DERIVATIVES SETUP ##########
@@ -153,8 +153,7 @@ if [ $palm_tfce_stats -eq 1 ]; then
 
     echo 'Setting up PALM TFCE stats...'
 
-    #LIST_HEMI=('L' 'R')
-    LIST_HEMI=('R')
+    LIST_HEMI=('L' 'R')
 
     cd $dir_output_model
 
@@ -177,14 +176,15 @@ if [ $palm_tfce_stats -eq 1 ]; then
             -i $input_file \
             -d design_demo.mat \
             -t conSig_demo.con \
-            -d design_demo.mat \
-            -t conBlind_demo.con \
-            -T -tfce2D \
             -C 3.1 \
+            -T \
+            -tfce_H 1 \
+            -tfce_E 0.5 \
+            -tfce_C 1 \
             -m $mask_file \
             -s $surf_file $surf_avg \
             -o $output \
-            -fdr  -n 10000
+            -fdr  -n 5000
 
         #CHECK FOR REVERSE MASK MODEL?  - LEAVE THAT FOR LATER! 
 
@@ -238,35 +238,41 @@ if [ $palm_build_cifti -eq 1 ]; then
 
         #Get raw Tstat values once before moving to various p values
 
+
+            #REMOVING _d1 sufix since I'm testing with one contrast only!
             wb_command \
                 -cifti-create-dense-from-template \
                 $dir_output_model/${Smoothed}MyelinMaps_BC${Res}.dscalar.nii \
                 $dir_output_model/cifti_results/${output_cifti}_SightedGtBlind_${LIST_STATS[$stat]}_tstat.dscalar.nii \
-                -metric CORTEX_LEFT $dir_output_model/${output}_L_${LIST_STATS[$stat]}_tstat_d1.gii \
-                -metric CORTEX_RIGHT $dir_output_model/${output}_R_${LIST_STATS[$stat]}_tstat_d1.gii
+                -metric CORTEX_LEFT $dir_output_model/${output}_L_${LIST_STATS[$stat]}_tstat.gii \
+                -metric CORTEX_RIGHT $dir_output_model/${output}_R_${LIST_STATS[$stat]}_tstat.gii
 
-            wb_command \
-                -cifti-create-dense-from-template \
-                $dir_output_model/${Smoothed}MyelinMaps_BC${Res}.dscalar.nii \
-                $dir_output_model/cifti_results/${output_cifti}_BlindGtSighted_${LIST_STATS[$stat]}_tstat.dscalar.nii \
-                -metric CORTEX_LEFT $dir_output_model/${output}_L_${LIST_STATS[$stat]}_tstat_d2.gii \
-                -metric CORTEX_RIGHT $dir_output_model/${output}_R_${LIST_STATS[$stat]}_tstat_d2.gii
+            #wb_command \
+            #    -cifti-create-dense-from-template \
+            #    $dir_output_model/${Smoothed}MyelinMaps_BC${Res}.dscalar.nii \
+            #    $dir_output_model/cifti_results/${output_cifti}_BlindGtSighted_${LIST_STATS[$stat]}_tstat.dscalar.nii \
+            #    -metric CORTEX_LEFT $dir_output_model/${output}_L_${LIST_STATS[$stat]}_tstat_d2.gii \
+            #    -metric CORTEX_RIGHT $dir_output_model/${output}_R_${LIST_STATS[$stat]}_tstat_d2.gii
 
             # Now loop through p values
+
+
             for pval in "${!LIST_PVAL[@]}" ; do
+
+            #REMOVING _d1 sufix since I'm testing with one contrast only!
                 wb_command \
                     -cifti-create-dense-from-template \
                     $dir_output_model/${Smoothed}MyelinMaps_BC${Res}.dscalar.nii \
                     $dir_output_model/cifti_results/${output_cifti}_SightedGtBlind_${LIST_STATS[$stat]}_tstat_${LIST_PVAL[$pval]}.dscalar.nii \
-                    -metric CORTEX_LEFT $dir_output_model/${output}_L_${LIST_STATS[$stat]}_tstat_${LIST_PVAL[$pval]}_d1.gii \
-                    -metric CORTEX_RIGHT $dir_output_model/${output}_R_${LIST_STATS[$stat]}_tstat_${LIST_PVAL[$pval]}_d1.gii
+                    -metric CORTEX_LEFT $dir_output_model/${output}_L_${LIST_STATS[$stat]}_tstat_${LIST_PVAL[$pval]}.gii \
+                    -metric CORTEX_RIGHT $dir_output_model/${output}_R_${LIST_STATS[$stat]}_tstat_${LIST_PVAL[$pval]}.gii
 
-                wb_command \
-                    -cifti-create-dense-from-template \
-                    $dir_output_model/${Smoothed}MyelinMaps_BC${Res}.dscalar.nii \
-                    $dir_output_model/cifti_results/${output_cifti}_BlindGtSighted_${LIST_STATS[$stat]}_tstat_${LIST_PVAL[$pval]}.dscalar.nii \
-                    -metric CORTEX_LEFT $dir_output_model/${output}_L_${LIST_STATS[$stat]}_tstat_${LIST_PVAL[$pval]}_d2.gii \
-                    -metric CORTEX_RIGHT $dir_output_model/${output}_R_${LIST_STATS[$stat]}_tstat_${LIST_PVAL[$pval]}_d2.gii
+               # wb_command \
+               #     -cifti-create-dense-from-template \
+               #     $dir_output_model/${Smoothed}MyelinMaps_BC${Res}.dscalar.nii \
+               #     $dir_output_model/cifti_results/${output_cifti}_BlindGtSighted_${LIST_STATS[$stat]}_tstat_${LIST_PVAL[$pval]}.dscalar.nii \
+               #     -metric CORTEX_LEFT $dir_output_model/${output}_L_${LIST_STATS[$stat]}_tstat_${LIST_PVAL[$pval]}_d2.gii \
+               #     -metric CORTEX_RIGHT $dir_output_model/${output}_R_${LIST_STATS[$stat]}_tstat_${LIST_PVAL[$pval]}_d2.gii
         
             done
         done

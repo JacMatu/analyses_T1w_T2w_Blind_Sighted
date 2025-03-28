@@ -18,9 +18,13 @@ main_dir <- '/Volumes/Slim_Reaper/Projects/analyses_T1w_T2w_Blind_Sighted/code/s
 #data <- read_tsv(paste(main_dir, 'Correlation_Coefficients.tsv', sep = '/'))
 #data <- read_tsv(paste(main_dir, 'Correlation_Coefficients_Ind.tsv', sep = '/'))
 
-corrtype <- 'Pearson' #'Spearman' 'Pearson'
+corrtype <- 'Spearman' #'Spearman' 'Pearson'
 
-data <- read_tsv(paste(main_dir, paste0(corrtype, '_Correlation_Coefficients_Ind.tsv'), sep = '/'))
+data <- read_tsv(paste(main_dir, paste0(corrtype, '_Correlation_EVC_vOTC_Coefficients_Smoothed_Ind.tsv'), sep = '/'))
+#data <- read_tsv(paste(main_dir, paste0(corrtype, '_Correlation_Coefficients_Smoothed_Ind.tsv'), sep = '/'))
+#data <- read_tsv(paste(main_dir, paste0(corrtype, '_PartialCorrelation_Coefficients_Smoothed_Ind.tsv'), sep = '/'))
+
+EVC_vOTC <- 1
 
 data_long <- data %>% 
     pivot_longer(cols = everything(), 
@@ -30,6 +34,13 @@ data_long <- data %>%
     mutate(Group = factor(Group, levels = c('blind', 'sighted'))) %>% 
     mutate(CorrType = factor(CorrType, levels = c('WG', 'BG'))) %>% 
     mutate(Region = factor(Region, levels = c('WholeBrain', 'OccipitalCortex', 'V1')))
+                 
+if(EVC_vOTC == 1){
+    data_long <- data_long %>% 
+        mutate(Region = recode(Region, 
+                               'OccipitalCortex' = 'vOTC',  
+                               'V1' = 'EVC'))
+}
 
 
 source(paste(main_dir, 'MyelinMaps_plot_functions.R', sep = '/'))

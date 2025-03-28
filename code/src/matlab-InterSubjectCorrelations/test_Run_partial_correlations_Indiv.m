@@ -7,10 +7,10 @@ addpath('/Users/jacekmatuszewski/Documents/GitHub/cifti-matlab');
 wb = '/Users/jacekmatuszewski/Documents/GitHub/workbench_2/bin_macosx64/wb_command';
 
 %4D file, 1:20 = BLIND, then 21:40 = SIGHTED
-cifti_4D='/Volumes/Slim_Reaper/Projects/analyses_T1w_T2w_Blind_Sighted/outputs/derivatives/PALM-stats/glm_inputs/MyelinMaps_BC32k.dscalar.nii';
+cifti_4D='/Volumes/Slim_Reaper/Projects/analyses_T1w_T2w_Blind_Sighted/outputs/derivatives/PALM-stats/archive/glm_inputs/SmoothedMyelinMaps_BC32k.dscalar.nii';
 
-data_blind = ciftiopen(cifti_4D, wb).cdata(:, 1:20);
-data_sighted = ciftiopen(cifti_4D, wb).cdata(:, 21:40);
+%data_blind = ciftiopen(cifti_4D, wb).cdata(:, 1:20);
+%data_sighted = ciftiopen(cifti_4D, wb).cdata(:, 21:40);
 
 corrtype = 'Spearman'; %'Spearman' 'Pearson'
 
@@ -18,6 +18,26 @@ corrtype = 'Spearman'; %'Spearman' 'Pearson'
 % 59412 rows for 32k res data
 % 40 columns for 40 subjects
 % disp(size(data_4D));
+
+%% ADD AGE AND GENDER AS COVARIATES
+demo_txt='/Volumes/Slim_Reaper/Projects/analyses_T1w_T2w_Blind_Sighted/inputs/palm_glm_files/design_demo.txt';
+
+demo_data = readmatrix(demo_txt);
+
+cifti_data=ciftiopen(cifti_4D, wb).cdata;
+
+ages = demo_data(:,3);
+sexes = demo_data(:,4);
+
+%%REgress out ages and sexes from the data 
+% Regress out ages and sexes from cifti_data
+X = [ones(size(ages)), ages, sexes]; % Design matrix with intercept, ages, and sexes
+beta = (X' * X) \ (X' * cifti_data'); % Compute regression coefficients
+residuals = cifti_data' - X * beta; % Compute residuals
+partial_cifti_data = residuals'; % Update cifti_data with residuals
+
+data_blind = partial_cifti_data(:, 1:20);
+data_sighted = partial_cifti_data(:, 21:40);
 
 %% WHOLE BRAIN CORRELATIONS
 
@@ -232,7 +252,5 @@ corr_table = table(blind_WG_WholeBrain, blind_BG_WholeBrain, ...
     sighted_WG_V1, sighted_BG_V1);
 
 
-writetable(corr_table, [corrtype, '_Correlation_Coefficients_Ind.tsv'], 'Delimiter', 'tab','FileType', 'text');
+writetable(corr_table, [corrtype, '_PartialCorrelation_Coefficients_Smoothed_Ind.tsv'], 'Delimiter', 'tab','FileType', 'text');
 %% TO BE DONE: STATS! 
-
-
